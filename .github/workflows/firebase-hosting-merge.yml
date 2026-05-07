@@ -18,6 +18,8 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - run: npm ci && npm run build
+        env:
+          VITE_APP_KEY: ${{ secrets.VITE_APP_KEY }}
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
