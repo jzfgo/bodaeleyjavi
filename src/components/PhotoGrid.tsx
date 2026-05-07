@@ -10,7 +10,7 @@ export function PhotoGrid({ photos, onPhotoClick }: Props) {
   return (
     <div className="photo-grid">
       {photos.map((photo, i) => (
-        <div key={`${photo.url}-${i}`} style={{ breakInside: 'avoid', marginBottom: 12 }}>
+        <div key={`${photo.url}-${i}`}>
           <img
             src={photo.url}
             alt=""

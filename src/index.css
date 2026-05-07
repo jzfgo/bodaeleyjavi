@@ -2,15 +2,15 @@
 body { -webkit-font-smoothing: antialiased; background: #f5efe6; }
 
 /* Responsive helpers used by components via className */
-.photo-grid { columns: 3; column-gap: 12px; max-width: 980px; margin: 0 auto; padding: 0 24px; }
+.photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 980px; margin: 0 auto; padding: 0 24px; align-items: start; }
 .hero-headline { font-size: 100px; }
 .page-section { padding-left: 48px; padding-right: 48px; }
 
 @media (max-width: 700px) {
-  .photo-grid { columns: 2; }
+  .photo-grid { grid-template-columns: repeat(2, 1fr); }
   .hero-headline { font-size: 60px; }
   .page-section { padding-left: 24px; padding-right: 24px; }
 }
 @media (max-width: 480px) {
-  .photo-grid { columns: 1; }
+  .photo-grid { grid-template-columns: 1fr; }
 }
