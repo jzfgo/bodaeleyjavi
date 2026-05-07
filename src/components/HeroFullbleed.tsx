@@ -8,7 +8,7 @@ export function HeroFullbleed() {
         <img
           src={HERO_URL}
           alt=""
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center', display: 'block' }}
         />
       )}
       <div style={{
