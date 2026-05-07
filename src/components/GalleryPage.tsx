@@ -1,5 +1,11 @@
 import { useState } from 'react'
-import photos from '../photos.js'
+import rawPhotos from '../photos.js'
+
+const STORAGE_BASE = 'https://firebasestorage.googleapis.com/v0/b/bodaeleyjavi.firebasestorage.app/o/gallery%2F'
+const photos = rawPhotos.map((p: { url: string; ratio: string }) => ({
+  ...p,
+  url: `${STORAGE_BASE}${p.url}?alt=media`,
+}))
 import { PasswordGate } from './PasswordGate'
 import { PhotoGrid } from './PhotoGrid'
 import { Lightbox } from './Lightbox'

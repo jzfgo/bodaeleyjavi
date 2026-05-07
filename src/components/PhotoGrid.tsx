@@ -5,6 +5,7 @@ interface Props {
   onPhotoClick: (idx: number) => void
 }
 
+
 export function PhotoGrid({ photos, onPhotoClick }: Props) {
   return (
     <div className="photo-grid">
