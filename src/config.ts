@@ -1,2 +1,3 @@
-// Replace with the Firebase Storage download URL of the hero photo after uploading.
-export const HERO_URL = ''
+export const STORAGE_BASE = 'https://firebasestorage.googleapis.com/v0/b/bodaeleyjavi.firebasestorage.app/o/gallery%2F'
+export const HERO_URL = `${STORAGE_BASE}20251115144638.jpg?alt=media`
+

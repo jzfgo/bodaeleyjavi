@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import rawPhotos from '../photos.js'
+import { STORAGE_BASE } from '../config'
 
-const STORAGE_BASE = 'https://firebasestorage.googleapis.com/v0/b/bodaeleyjavi.firebasestorage.app/o/gallery%2F'
 const photos = rawPhotos.map((p: { url: string; ratio: string }) => ({
   ...p,
   url: `${STORAGE_BASE}${p.url}?alt=media`,
