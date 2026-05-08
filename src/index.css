@@ -2,15 +2,12 @@
 body { -webkit-font-smoothing: antialiased; background: #f5efe6; }
 
 /* Responsive helpers used by components via className */
-.photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 980px; margin: 0 auto; padding: 0 24px; align-items: start; }
+.tabs-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.tabs-scroll::-webkit-scrollbar { display: none; }
 .hero-headline { font-size: 100px; }
 .page-section { padding-left: 48px; padding-right: 48px; }
 
 @media (max-width: 700px) {
-  .photo-grid { grid-template-columns: repeat(2, 1fr); }
   .hero-headline { font-size: 60px; }
   .page-section { padding-left: 24px; padding-right: 24px; }
-}
-@media (max-width: 480px) {
-  .photo-grid { grid-template-columns: 1fr; }
 }
