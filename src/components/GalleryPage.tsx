@@ -1,24 +1,59 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import rawPhotos from '../photos.js'
-import { STORAGE_BASE } from '../config'
-
-const photos = rawPhotos.map((p: { url: string; ratio: string }) => ({
-  ...p,
-  url: `${STORAGE_BASE}${p.url}?alt=media`,
-}))
+import { STORAGE_BASE, THUMB_BASE } from '../config'
 import { PasswordGate } from './PasswordGate'
 import { PhotoGrid } from './PhotoGrid'
 import { Lightbox } from './Lightbox'
 import { THEME, FONTS } from '../tokens'
 
+const photos = rawPhotos.map((p: { url: string; ratio: string }) => ({
+  ...p,
+  url: `${STORAGE_BASE}${p.url}?alt=media`,
+  thumb: `${THUMB_BASE}${p.url}?alt=media`,
+}))
+
 const PAGE_SIZE = 18
+const AUTH_KEY = 'boda_unlocked'
 
 export function GalleryPage() {
-  const [unlocked, setUnlocked] = useState(false)
+  const [unlocked, setUnlocked] = useState(() => localStorage.getItem(AUTH_KEY) === '1')
   const [openIdx, setOpenIdx] = useState<number | null>(null)
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
+  const sentinelRef = useRef<HTMLDivElement>(null)
+  const visibleCountRef = useRef(visibleCount)
+  visibleCountRef.current = visibleCount
 
-  if (!unlocked) return <PasswordGate onUnlock={() => setUnlocked(true)} />
+  useEffect(() => { window.scrollTo(0, 0) }, [])
+
+  function unlock() {
+    localStorage.setItem(AUTH_KEY, '1')
+    setUnlocked(true)
+    window.scrollTo(0, 0)
+  }
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current
+    if (!sentinel) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && visibleCountRef.current < photos.length) {
+          setVisibleCount(v => Math.min(v + PAGE_SIZE, photos.length))
+        }
+      },
+      { rootMargin: '300px' }
+    )
+    observer.observe(sentinel)
+    return () => observer.disconnect()
+  }, [])
+
+  function handleNav(idx: number) {
+    if (idx >= visibleCountRef.current) {
+      setVisibleCount(Math.min(idx + PAGE_SIZE, photos.length))
+    }
+    setOpenIdx(idx)
+  }
+
+  if (!unlocked) return <PasswordGate onUnlock={unlock} />
 
   const visible = photos.slice(0, visibleCount)
 
@@ -48,27 +83,13 @@ export function GalleryPage() {
 
       <PhotoGrid photos={visible} onPhotoClick={setOpenIdx} />
 
-      {visibleCount < photos.length && (
-        <div style={{ textAlign: 'center', padding: '40px 0 64px' }}>
-          <button
-            onClick={() => setVisibleCount((v) => v + PAGE_SIZE)}
-            style={{
-              fontFamily: FONTS.body, fontSize: 11, letterSpacing: 4,
-              textTransform: 'uppercase', color: THEME.ink, background: 'none',
-              border: `1px solid ${THEME.rule}`, borderRadius: 999,
-              padding: '12px 32px', cursor: 'pointer',
-            }}
-          >
-            Cargar más
-          </button>
-        </div>
-      )}
+      <div ref={sentinelRef} style={{ height: 1 }} />
 
       <Lightbox
-        photos={visible}
+        photos={photos}
         openIdx={openIdx}
         onClose={() => setOpenIdx(null)}
-        onNav={setOpenIdx}
+        onNav={handleNav}
       />
     </main>
   )

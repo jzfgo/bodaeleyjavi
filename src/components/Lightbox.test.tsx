@@ -5,9 +5,9 @@ import { Lightbox } from './Lightbox'
 import type { Photo } from '../types'
 
 const photos: Photo[] = [
-  { url: 'a.jpg', ratio: '4/5' },
-  { url: 'b.jpg', ratio: '1/1' },
-  { url: 'c.jpg', ratio: '4/5' },
+  { url: 'a.jpg', thumb: 'a-t.jpg', ratio: '4/5' },
+  { url: 'b.jpg', thumb: 'b-t.jpg', ratio: '1/1' },
+  { url: 'c.jpg', thumb: 'c-t.jpg', ratio: '4/5' },
 ]
 
 describe('Lightbox', () => {

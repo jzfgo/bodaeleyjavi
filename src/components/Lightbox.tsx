@@ -23,6 +23,21 @@ const CIRCLE_BTN: CSSProperties = {
   cursor: 'pointer', flexShrink: 0,
 }
 
+function downloadPhoto(url: string) {
+  const filename = url.match(/gallery%2F([^?]+)/)?.[1] ?? 'photo.jpg'
+  fetch(url)
+    .then(r => r.blob())
+    .then(blob => {
+      const a = document.createElement('a')
+      a.href = URL.createObjectURL(blob)
+      a.download = decodeURIComponent(filename)
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(a.href)
+    })
+}
+
 export function Lightbox({ photos, openIdx, onClose, onNav }: Props) {
   const touchX = useRef<number | null>(null)
   const touchY = useRef<number | null>(null)
@@ -62,21 +77,34 @@ export function Lightbox({ photos, openIdx, onClose, onNav }: Props) {
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}
     >
-      <button
-        aria-label="Cerrar"
-        onClick={(e) => { e.stopPropagation(); onClose() }}
-        style={{
-          ...CIRCLE_BTN, position: 'absolute',
-          top: 'max(16px, env(safe-area-inset-top))',
-          right: 'max(16px, env(safe-area-inset-right))',
-        }}
-      >
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-          stroke="white" strokeWidth="2" strokeLinecap="round">
-          <line x1="4" y1="4" x2="16" y2="16" />
-          <line x1="16" y1="4" x2="4" y2="16" />
-        </svg>
-      </button>
+      <div style={{
+        position: 'absolute', display: 'flex', gap: 8,
+        top: 'max(16px, env(safe-area-inset-top))',
+        right: 'max(16px, env(safe-area-inset-right))',
+      }}>
+        <button
+          aria-label="Descargar"
+          onClick={(e) => { e.stopPropagation(); downloadPhoto(photo.url) }}
+          style={CIRCLE_BTN}
+        >
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+            stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 3v9M5 8l4 4 4-4" />
+            <path d="M3 15h12" />
+          </svg>
+        </button>
+        <button
+          aria-label="Cerrar"
+          onClick={(e) => { e.stopPropagation(); onClose() }}
+          style={CIRCLE_BTN}
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+            stroke="white" strokeWidth="2" strokeLinecap="round">
+            <line x1="4" y1="4" x2="16" y2="16" />
+            <line x1="16" y1="4" x2="4" y2="16" />
+          </svg>
+        </button>
+      </div>
 
       <button
         aria-label="Anterior"
