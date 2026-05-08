@@ -21,7 +21,7 @@ export function Footer() {
         fontFamily: FONTS.body, fontSize: 10, letterSpacing: 3,
         textTransform: 'uppercase', color: THEME.accent,
       }}>
-        elenica@gmail.com · #bodaeleyjavi2025
+        javierzapata82@gmail.com · elenica@gmail.com · #bodaeleyjavi2025
       </div>
     </footer>
   )
