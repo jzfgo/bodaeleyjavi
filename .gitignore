@@ -4,3 +4,4 @@ dist/
 .env
 .firebase
 *.tsbuildinfo
+/.claude/settings.local.json
