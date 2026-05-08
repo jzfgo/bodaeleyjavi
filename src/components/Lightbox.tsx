@@ -24,17 +24,21 @@ const CIRCLE_BTN: CSSProperties = {
 }
 
 function downloadPhoto(url: string) {
-  const filename = url.match(/gallery%2F([^?]+)/)?.[1] ?? 'photo.jpg'
+  const filename = decodeURIComponent(url.match(/gallery%2F([^?&]+)/)?.[1] ?? 'photo.jpg')
   fetch(url)
     .then(r => r.blob())
     .then(blob => {
       const a = document.createElement('a')
       a.href = URL.createObjectURL(blob)
-      a.download = decodeURIComponent(filename)
+      a.download = filename
       document.body.appendChild(a)
       a.click()
       document.body.removeChild(a)
       URL.revokeObjectURL(a.href)
+    })
+    .catch(() => {
+      // Fallback when CORS isn't configured on the bucket
+      window.open(url, '_blank')
     })
 }
 

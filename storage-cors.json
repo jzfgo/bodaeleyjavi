@@ -1,0 +1,13 @@
+[
+  {
+    "origin": [
+      "https://bodaeleyjavi.es",
+      "https://bodaeleyjavi.web.app",
+      "https://bodaeleyjavi.firebaseapp.com",
+      "http://localhost:5173"
+    ],
+    "method": ["GET"],
+    "responseHeader": ["Content-Type"],
+    "maxAgeSeconds": 3600
+  }
+]
