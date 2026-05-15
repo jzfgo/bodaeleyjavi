@@ -1,7 +1,8 @@
 .worktrees/
-node_modules/
 dist/
+gallery/
+node_modules/
+.DS_Store
 .env
 .firebase
 *.tsbuildinfo
-/.claude/settings.local.json
