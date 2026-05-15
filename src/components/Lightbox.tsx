@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { FONTS } from '../tokens'
 import type { Photo } from '../types'
+import { trackPhotoDownload } from '../analytics'
 
 interface Props {
   photos: Photo[]
@@ -23,8 +24,9 @@ const CIRCLE_BTN: CSSProperties = {
   cursor: 'pointer', flexShrink: 0,
 }
 
-function downloadPhoto(url: string) {
+function downloadPhoto(url: string, group: string) {
   const filename = decodeURIComponent(url.match(/gallery%2F([^?&]+)/)?.[1] ?? 'photo.jpg')
+  trackPhotoDownload(filename, group)
   fetch(url)
     .then(r => r.blob())
     .then(blob => {
@@ -88,7 +90,7 @@ export function Lightbox({ photos, openIdx, onClose, onNav }: Props) {
       }}>
         <button
           aria-label="Descargar"
-          onClick={(e) => { e.stopPropagation(); downloadPhoto(photo.url) }}
+          onClick={(e) => { e.stopPropagation(); downloadPhoto(photo.url, photo.group ?? '') }}
           style={CIRCLE_BTN}
         >
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none"

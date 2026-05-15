@@ -5,6 +5,7 @@ import { PasswordGate } from './PasswordGate'
 import { PhotoGrid } from './PhotoGrid'
 import { Lightbox } from './Lightbox'
 import { THEME, FONTS } from '../tokens'
+import { trackSectionView, trackPhotoView } from '../analytics'
 
 const photos = rawPhotos.map((p: { url: string; ratio: string; group?: string }) => ({
   ...p,
@@ -32,6 +33,13 @@ export function GalleryPage() {
 
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
+  useEffect(() => {
+    if (openIdx === null) return
+    const photo = filtered[openIdx]
+    const filename = decodeURIComponent(photo.url.match(/gallery%2F([^?&]+)/)?.[1] ?? '')
+    trackPhotoView(filename, photo.group ?? '', openIdx)
+  }, [openIdx]) // eslint-disable-line react-hooks/exhaustive-deps
+
   function unlock() {
     localStorage.setItem(AUTH_KEY, '1')
     setUnlocked(true)
@@ -43,6 +51,7 @@ export function GalleryPage() {
     setVisibleCount(PAGE_SIZE)
     setOpenIdx(null)
     window.scrollTo(0, 0)
+    trackSectionView(id ?? 'Otras')
   }
 
   const filtered = activeGroup === null
