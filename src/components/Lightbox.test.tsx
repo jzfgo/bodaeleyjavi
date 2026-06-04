@@ -4,8 +4,9 @@ import { vi, describe, it, expect } from 'vitest'
 import { Lightbox } from './Lightbox'
 import type { Photo } from '../types'
 
-vi.mock('../firebase', () => ({ analytics: {} }))
-vi.mock('../analytics')
+vi.mock('../analytics', () => ({
+  trackPhotoDownload: vi.fn(),
+}))
 
 const photos: Photo[] = [
   { url: 'a.jpg', thumb: 'a-t.jpg', ratio: '4/5' },
