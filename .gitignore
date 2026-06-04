@@ -6,3 +6,4 @@ node_modules/
 .env
 .firebase
 *.tsbuildinfo
+docs/superpowers/plans/
