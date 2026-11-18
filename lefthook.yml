@@ -1,0 +1,17 @@
+# lefthook.yml
+#
+# Instalar:  brew install lefthook gitleaks
+# Activar:   lefthook install
+# Docs:      https://lefthook.dev/configuration/
+
+pre-commit:
+  jobs:
+    # Bloquea el commit si lo que está preparado contiene secretos.
+    # Solo mira el staging, no el historial.
+    - name: secrets
+      run: |
+        if ! command -v gitleaks >/dev/null 2>&1; then
+          echo "⚠️  gitleaks no está instalado — se salta el escaneo (brew install gitleaks)"
+          exit 0
+        fi
+        gitleaks git --staged --no-banner --redact

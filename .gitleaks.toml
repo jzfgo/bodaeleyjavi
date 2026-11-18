@@ -1,0 +1,9 @@
+# .gitleaks.toml
+# Docs: https://github.com/gitleaks/gitleaks#configuration
+
+[extend]
+# Reglas por defecto de gitleaks: AWS, GitHub, Google/Firebase API keys,
+# JWT, claves privadas, etc.
+useDefault = true
+
+# Añade [allowlist] aquí si aparecen falsos positivos.
