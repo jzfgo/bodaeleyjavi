@@ -1,0 +1,51 @@
+version: 2
+
+# Web ya publicada que apenas se toca: npm NO recibe version updates, solo
+# security updates, y agrupados en un único PR. Antes llegaba un PR por paquete
+# (casi todos transitivos de firebase-tools) y acababan cerrándose en bloque sin
+# fusionar, mientras las alertas se acumulaban.
+#
+# Para activar version updates de npm, sustituir `open-pull-requests-limit: 0`
+# por un número > 0 (y añadir `cooldown:`).
+
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+
+    # `schedule` es OBLIGATORIO aunque las version updates estén apagadas: sin él
+    # el archivo es inválido y Dependabot lo ignora entero (grupos incluidos).
+    schedule:
+      interval: "weekly"
+
+    # 0 apaga las version updates. Los security updates siguen llegando: tienen
+    # su propio límite interno, no configurable.
+    open-pull-requests-limit: 0
+
+    groups:
+      # Sin `applies-to: security-updates` el grupo solo afectaría a las version
+      # updates, que aquí están apagadas: no agruparía nada.
+      npm-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+
+    commit-message:
+      prefix: "chore(deps)"
+
+  # Los dos workflows de Firebase Hosting usan tags de major (`@v4`, `@v0`):
+  # solo llegará PR al salir un major nuevo. El cooldown evita adoptar un tag
+  # recién publicado, que es la vía de entrada si una action se compromete; el
+  # deploy tiene la service account de Firebase.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 3
+    cooldown:
+      default-days: 8
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    groups:
+      actions:
+        patterns: ["*"]
